@@ -48,9 +48,9 @@ export default function TodoCard({
   return (
     <div
       ref={setNodeRef}
-      style={{ ...dndStyle, ...deleteStyle, backgroundColor: '#ffffff' }}
-      className={`group flex items-center gap-2 rounded-2xl px-3 py-3 ${
-        isDragging ? 'ring-2 ring-indigo-300' : ''
+      style={{ ...dndStyle, ...deleteStyle }}
+      className={`group flex items-center gap-2 rounded-2xl px-3 py-3 bg-white dark:bg-slate-800 ${
+        isDragging ? 'ring-2 ring-indigo-300 dark:ring-indigo-600' : ''
       }`}
     >
       {/* 드래그 핸들 */}
@@ -58,7 +58,7 @@ export default function TodoCard({
         <button
           {...attributes}
           {...listeners}
-          className="flex-shrink-0 p-1 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500 transition-colors touch-none"
+          className="flex-shrink-0 p-1 cursor-grab active:cursor-grabbing text-slate-300 dark:text-slate-600 hover:text-slate-500 dark:hover:text-slate-400 transition-colors touch-none"
           aria-label="순서 변경"
           tabIndex={-1}
         >
@@ -104,14 +104,14 @@ export default function TodoCard({
         {/* 제목 */}
         <span
           className={`block text-sm font-medium leading-snug truncate ${
-            todo.is_complete ? 'line-through text-slate-400' : 'text-slate-800'
+            todo.is_complete ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-100'
           }`}
         >
           {todo.title}
         </span>
         {/* 날짜 */}
         {dateDisplay && (
-          <p className={`text-xs mt-0.5 ${dateDisplay.isPast && !todo.is_complete ? 'text-red-400' : 'text-slate-400'}`}>
+          <p className={`text-xs mt-0.5 ${dateDisplay.isPast && !todo.is_complete ? 'text-red-400 dark:text-red-400' : 'text-slate-400 dark:text-slate-500'}`}>
             {dateDisplay.date}{dateDisplay.isPast && !todo.is_complete ? ' · Delayed' : ''}
           </p>
         )}
@@ -133,7 +133,7 @@ export default function TodoCard({
         ))}
         <button
           onClick={(e) => { e.stopPropagation(); onDelete(todo.id); }}
-          className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-slate-300 hover:text-red-400 transition-all flex-shrink-0"
+          className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-400 transition-all flex-shrink-0"
           aria-label="삭제"
         >
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

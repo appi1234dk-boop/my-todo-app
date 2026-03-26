@@ -251,9 +251,9 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
         {todayTodos.length > 0 && (
           <section>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-bold text-slate-800 uppercase tracking-widest">📅 오늘</span>
-              <span className="text-xs text-slate-500 font-semibold">({todayTodos.length})</span>
-              <span className="flex-1 h-px bg-slate-200" />
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">📅 오늘</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">({todayTodos.length})</span>
+              <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
             </div>
             <DndContext
               sensors={sensors}
@@ -287,8 +287,8 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
             onClick={() => setFilterCategoryId(null)}
             className={`px-3 py-1 rounded-full text-xs font-semibold border transition ${
               filterCategoryId === null
-                ? 'bg-slate-800 text-white border-slate-800'
-                : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'
+                ? 'bg-slate-800 text-white border-slate-800 dark:bg-slate-200 dark:text-slate-900 dark:border-slate-200'
+                : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700 dark:hover:border-slate-500'
             }`}
           >
             전체
@@ -316,7 +316,7 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
               {/* 카테고리 삭제 버튼 */}
               <button
                 onClick={() => handleDeleteCategory(cat.id)}
-                className="w-4 h-4 flex items-center justify-center rounded-full text-slate-300 hover:text-red-400 hover:bg-red-50 transition"
+                className="w-4 h-4 flex items-center justify-center rounded-full text-slate-300 dark:text-slate-600 hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition"
                 aria-label={`${cat.name} 삭제`}
               >
                 <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -339,7 +339,7 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
                 onChange={(e) => setNewCatName(e.target.value)}
                 placeholder="이름 입력"
                 maxLength={20}
-                className="w-24 px-2 py-0.5 rounded-full text-xs border border-slate-300 outline-none focus:border-indigo-400 bg-white"
+                className="w-24 px-2 py-0.5 rounded-full text-xs border border-slate-300 dark:border-slate-600 outline-none focus:border-indigo-400 bg-white dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
               />
               <button
                 type="submit"
@@ -358,7 +358,7 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
           ) : (
             <button
               onClick={() => setAddingCategory(true)}
-              className="w-6 h-6 flex items-center justify-center rounded-full border border-dashed border-slate-300 text-slate-400 hover:border-indigo-400 hover:text-indigo-500 transition"
+              className="w-6 h-6 flex items-center justify-center rounded-full border border-dashed border-slate-300 dark:border-slate-600 text-slate-400 dark:text-slate-500 hover:border-indigo-400 hover:text-indigo-500 transition"
               aria-label="카테고리 추가"
             >
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -380,7 +380,7 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
           >
             <div className="space-y-1.5">
               {activeTodos.length === 0 ? (
-                <div className="py-8 text-center text-slate-400 text-sm">
+                <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-sm">
                   할 일이 없어요! 추가해보세요 ✨
                 </div>
               ) : (
@@ -404,7 +404,7 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
           <div className="pt-1">
             <button
               onClick={() => setCompletedOpen((v) => !v)}
-              className="w-full flex items-center gap-2 py-2 text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors"
+              className="w-full flex items-center gap-2 py-2 text-xs font-semibold text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
             >
               <svg
                 className={`w-3.5 h-3.5 transition-transform ${completedOpen ? 'rotate-90' : ''}`}
@@ -416,8 +416,8 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
               완료
-              <span className="text-slate-300">({completedTodos.length})</span>
-              <span className="flex-1 h-px bg-slate-200" />
+              <span className="text-slate-300 dark:text-slate-600">({completedTodos.length})</span>
+              <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
             </button>
 
             {completedOpen && (
@@ -441,7 +441,7 @@ export default function TodoBoard({ initialTodos, categories: initialCategories 
         {/* ── 추가 버튼 ── */}
         <button
           onClick={openAddModal}
-          className="w-full flex items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 py-3 text-slate-400 hover:border-indigo-400 hover:text-indigo-500 transition-colors text-sm font-medium"
+          className="w-full flex items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 py-3 text-slate-400 dark:text-slate-500 hover:border-indigo-400 hover:text-indigo-500 transition-colors text-sm font-medium"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />

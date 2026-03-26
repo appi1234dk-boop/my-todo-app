@@ -19,6 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${geistSans.variable} h-full`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.theme==='dark')document.documentElement.classList.add('dark')}catch{}` }} />
+      </head>
       <body className="min-h-full antialiased">{children}</body>
     </html>
   );
