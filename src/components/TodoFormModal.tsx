@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Category, Todo } from '@/lib/types';
 
 interface Props {
@@ -31,6 +31,50 @@ export default function TodoFormModal({
   const [dueDate, setDueDate] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
+  // Animation state machine
+  const [mounted, setMounted] = useState(false);
+  const [animating, setAnimating] = useState<'enter' | 'exit' | null>(null);
+  const isMobileRef = useRef(false);
+  const titleRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    isMobileRef.current = window.matchMedia('(max-width: 639px)').matches;
+  }, []);
+
+  // open 변경 시 애니메이션 트리거
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      requestAnimationFrame(() => setAnimating('enter'));
+    } else {
+      setAnimating('exit');
+    }
+  }, [open]);
+
+  // exit 애니메이션 완료 후 unmount (데스크톱은 즉시)
+  useEffect(() => {
+    if (animating !== 'exit') return;
+    if (!isMobileRef.current) {
+      setMounted(false);
+      setAnimating(null);
+      return;
+    }
+    const id = setTimeout(() => {
+      setMounted(false);
+      setAnimating(null);
+    }, 400);
+    return () => clearTimeout(id);
+  }, [animating]);
+
+  // autoFocus: 모바일은 애니메이션 후 포커스, 데스크톱은 즉시
+  useEffect(() => {
+    if (!open) return;
+    const delay = isMobileRef.current ? 360 : 0;
+    const id = setTimeout(() => titleRef.current?.focus(), delay);
+    return () => clearTimeout(id);
+  }, [open]);
+
+  // 폼 데이터 리셋
   useEffect(() => {
     if (todo) {
       setTitle(todo.title);
@@ -38,10 +82,18 @@ export default function TodoFormModal({
       setSelectedIds(todo.category_ids);
     } else {
       setTitle('');
-      setDueDate(getTodayStr()); // 추가 모드: 오늘 날짜 기본값
+      setDueDate(getTodayStr());
       setSelectedIds([]);
     }
   }, [todo, open]);
+
+  function handleAnimationEnd(e: React.AnimationEvent<HTMLDivElement>) {
+    if (e.target !== e.currentTarget) return;
+    if (animating === 'exit') {
+      setMounted(false);
+      setAnimating(null);
+    }
+  }
 
   function toggleCategory(id: string) {
     setSelectedIds((prev) =>
@@ -81,13 +133,29 @@ export default function TodoFormModal({
     onClose();
   }
 
-  if (!open) return null;
+  if (!mounted) return null;
+
+  const isMobile = isMobileRef.current;
+  const sheetClass = isMobile
+    ? animating === 'exit' ? 'sheet-exit' : 'sheet-enter'
+    : '';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      style={{ height: '100dvh' }}
+    >
+      <div
+        className={`absolute inset-0 bg-black/30 ${animating === 'exit' ? 'backdrop-exit' : 'backdrop-enter'}`}
+        onClick={onClose}
+      />
 
-      <div className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl bg-white dark:bg-slate-900 p-6 pb-8 sm:pb-6">
+      <div
+        className={`relative w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl bg-white dark:bg-slate-900 p-6 max-h-[85dvh] sm:max-h-[90vh] overflow-y-auto ${sheetClass}`}
+        onAnimationEnd={handleAnimationEnd}
+        style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
+      >
+        {/* 모바일 드래그 핸들 */}
         <div className="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5 sm:hidden" />
 
         <h2 className="text-base font-bold text-slate-800 dark:text-slate-100 mb-5">
@@ -101,13 +169,13 @@ export default function TodoFormModal({
               제목 <span className="text-red-400">*</span>
             </label>
             <input
+              ref={titleRef}
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="할 일을 입력하세요"
               maxLength={500}
               required
-              autoFocus
               className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-indigo-400 focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-900 transition"
             />
           </div>

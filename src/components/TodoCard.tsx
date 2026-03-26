@@ -58,6 +58,7 @@ export default function TodoCard({
         <button
           {...attributes}
           {...listeners}
+          suppressHydrationWarning
           className="flex-shrink-0 p-1 cursor-grab active:cursor-grabbing text-slate-300 dark:text-slate-600 hover:text-slate-500 dark:hover:text-slate-400 transition-colors touch-none"
           aria-label="순서 변경"
           tabIndex={-1}

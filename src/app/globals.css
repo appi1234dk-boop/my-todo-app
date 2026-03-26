@@ -21,3 +21,39 @@ body {
   0%   { transform: translateX(0);     opacity: 1; }
   100% { transform: translateX(-110%); opacity: 0; }
 }
+
+@keyframes sheet-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes sheet-slide-down {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+
+@keyframes backdrop-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes backdrop-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.sheet-enter {
+  animation: sheet-slide-up 0.32s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.sheet-exit {
+  animation: sheet-slide-down 0.26s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.backdrop-enter {
+  animation: backdrop-fade-in 0.25s ease both;
+}
+
+.backdrop-exit {
+  animation: backdrop-fade-out 0.22s ease both;
+}
